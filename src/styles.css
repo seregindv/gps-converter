@@ -1,0 +1,6 @@
+body, html {
+    height: calc(100% - 3px);
+    width: calc(100% - 3px);
+    margin: 0;
+    padding: 0;
+}

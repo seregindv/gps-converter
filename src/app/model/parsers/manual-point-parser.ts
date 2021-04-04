@@ -8,7 +8,7 @@ export class ManualPointParser extends PointParser {
         if (!result) {
             return null;
         }
-        return new NamedEarthPoint(parseFloat(result[1].replace(',', '.')), parseFloat(result[2].replace(',', '.')),
+        return new NamedEarthPoint(parseFloat(result[2].replace(',', '.')), parseFloat(result[1].replace(',', '.')),
             result[3]);
     }
     get formatSample(): string {

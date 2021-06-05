@@ -1,36 +1,36 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ConverterBase } from '../model/converter-base';
 import { GpxConverter } from '../model/gpx-converter';
+import { KmlConverter } from '../model/kml-converter';
 
 @Component({
   selector: 'app-gps-converter',
   templateUrl: './gps-converter.component.html',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  styles: ['.large { font-size: 20px }']
 })
-export class GpsConverterComponent implements OnInit {
+export class GpsConverterComponent {
   constructor() { }
-
-  private _parser: GpxConverter;
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
-  ngOnInit(): void {
-  }
-
   fileName = '';
 
-  onSaveGpxClick(text: string) {
-    const lines = text.split('\n');
-    const gpx = this.parser.getGpx(lines);
-    var file = new Blob([gpx], { type: 'application/octet-stream' });
-    this.downloadLink.nativeElement.href = URL.createObjectURL(file);
-    this.downloadLink.nativeElement.download = `${this.fileName && this.fileName[0] ? this.fileName : 'points'}.gpx`;
-    this.downloadLink.nativeElement.click();
+  saveGpx(text: string): void {
+    this.save(text, new GpxConverter());
   }
 
-  private get parser(): GpxConverter {
-    if (!this._parser) {
-      this._parser = new GpxConverter();
-    }
-    return this._parser;
+  saveKml(text: string): void {
+    this.save(text, new KmlConverter());
+  }
+
+  private save(text: string, converter: ConverterBase): void {
+    const lines = text.split('\n');
+    const name = this.fileName && this.fileName[0] ? this.fileName : 'points';
+    const xml = converter.getXml(name, lines);
+    const file = new Blob([xml], { type: 'application/octet-stream' });
+    this.downloadLink.nativeElement.href = URL.createObjectURL(file);
+    this.downloadLink.nativeElement.download = `${name}.${converter.getExtension()}`;
+    this.downloadLink.nativeElement.click();
   }
 }

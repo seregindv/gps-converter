@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ConverterBase } from '../model/converter-base';
-import { GpxConverter } from '../model/gpx-converter';
-import { KmlConverter } from '../model/kml-converter';
+import { PointParser } from '../model/parsers/point-parser';
 
 @Component({
   selector: 'app-gps-converter',
@@ -10,21 +9,13 @@ import { KmlConverter } from '../model/kml-converter';
   styles: ['.large { font-size: 20px }']
 })
 export class GpsConverterComponent {
-  constructor() { }
+  constructor(public converters: ConverterBase, private _parsers: PointParser) { }
 
   @ViewChild('downloadLink') downloadLink: ElementRef;
 
   fileName = '';
 
-  saveGpx(text: string): void {
-    this.save(text, new GpxConverter());
-  }
-
-  saveKml(text: string): void {
-    this.save(text, new KmlConverter());
-  }
-
-  private save(text: string, converter: ConverterBase): void {
+  save(text: string, converter: ConverterBase): void {
     const lines = text.split('\n');
     const name = this.fileName && this.fileName[0] ? this.fileName : 'points';
     const xml = converter.getXml(name, lines);
@@ -32,5 +23,10 @@ export class GpsConverterComponent {
     this.downloadLink.nativeElement.href = URL.createObjectURL(file);
     this.downloadLink.nativeElement.download = `${name}.${converter.getExtension()}`;
     this.downloadLink.nativeElement.click();
+  }
+
+  showInfo(): void {
+    console.log(this.converters);
+    alert(['Supported formats: '].concat((this._parsers as unknown as PointParser[]).map(p => '- ' + p.formatSample)).join('\n'));
   }
 }

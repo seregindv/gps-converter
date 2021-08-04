@@ -1,14 +1,13 @@
-import { AutotravelPointParser } from './parsers/autotravel-point-parser';
-import { CultTourizmPointParser } from './parsers/cult-tourizm-point-parser';
-import { ManualPointParser } from './parsers/manual-point-parser';
+import { Injectable } from '@angular/core';
 import { NamedEarthPoint } from './parsers/named-earth-point';
-import { WikimapiaPointParser } from './parsers/wikimapia-point-parser';
+import { PointParser } from './parsers/point-parser';
 
 export abstract class ConverterBase {
-    private static parsers = [new WikimapiaPointParser(),
-    new ManualPointParser(),
-    new AutotravelPointParser(),
-    new CultTourizmPointParser()];
+    constructor(parsers: PointParser) {
+        this._parsers = parsers as unknown as PointParser[];
+    }
+
+    private _parsers: PointParser[];
 
     abstract getExtension(): string;
 
@@ -19,7 +18,7 @@ export abstract class ConverterBase {
     }
 
     protected parse(line: string): NamedEarthPoint {
-        for (const parser of ConverterBase.parsers) {
+        for (const parser of this._parsers) {
             const point = parser.createPoint(line);
             if (point) {
                 return point;

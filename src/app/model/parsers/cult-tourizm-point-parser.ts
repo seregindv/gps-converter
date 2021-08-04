@@ -1,5 +1,5 @@
-import { NamedEarthPoint } from "./named-earth-point";
-import { PointParser } from "./point-parser";
+import { NamedEarthPoint } from './named-earth-point';
+import { PointParser } from './point-parser';
 
 export class CultTourizmPointParser extends PointParser {
     createPoint(line: string): NamedEarthPoint {

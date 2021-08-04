@@ -6,11 +6,13 @@
         <div style="flex: 1 0 0">
             <input type="text" style="width: 100%" class="large" [(ngModel)]="fileName" placeholder="points">
         </div>
-        <div style="margin-left: 14px">
-            <button (click)="saveGpx(text.value)" class="large">Save GPX</button>
+        <div style="margin-left: 14px" (click)="showInfo()">
+            <button class="large">?</button>
         </div>
-        <div style="margin-left: 6px">
-            <button (click)="saveKml(text.value)" class="large">Save KML</button>
+        <div *ngFor="let converter of converters" style="margin-left: 6px">
+            <button (click)="save(text.value, converter)" class="large">
+                {{converter.getExtension() | uppercase}}
+            </button>
         </div>
         <a style="display: none" #downloadLink download="points.gpx">Download</a>
     </div>

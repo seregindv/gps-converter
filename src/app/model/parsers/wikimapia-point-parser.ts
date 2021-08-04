@@ -1,5 +1,5 @@
-import { NamedEarthPoint } from "./named-earth-point";
-import { PointParser } from "./point-parser";
+import { NamedEarthPoint } from './named-earth-point';
+import { PointParser } from './point-parser';
 
 
 export class WikimapiaPointParser extends PointParser {
@@ -8,9 +8,9 @@ export class WikimapiaPointParser extends PointParser {
         if (!result) {
             return null;
         }
-        return NamedEarthPoint.fromDegMinSec(result.groups['lon_deg'], result.groups['lon_min'], result.groups['lon_sec'],
-            result.groups['lat_deg'], result.groups['lat_min'], result.groups['lat_sec'],
-            result.groups['name']);
+        return NamedEarthPoint.fromDegMinSec(result.groups.lon_deg, result.groups.lon_min, result.groups.lon_sec,
+            result.groups.lat_deg, result.groups.lat_min, result.groups.lat_sec,
+            result.groups.name);
     }
     get formatSample(): string {
         return '55°52\'48"N   38°46\'38"E MTB Skill Park';

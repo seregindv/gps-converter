@@ -1,10 +1,10 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { GpsConverterComponent } from './gps-converter/gps-converter.component';
 import { FormsModule } from '@angular/forms';
-import { ServiceWorkerModule } from '@angular/service-worker';
+// import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AutotravelPointParser } from './model/parsers/autotravel-point-parser';
 import { PointParser } from './model/parsers/point-parser';
@@ -14,6 +14,7 @@ import { WikimapiaPointParser } from './model/parsers/wikimapia-point-parser';
 import { ConverterBase } from './model/converter-base';
 import { GpxConverter } from './model/gpx-converter';
 import { KmlConverter } from './model/kml-converter';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [
@@ -25,11 +26,17 @@ import { KmlConverter } from './model/kml-converter';
     AppRoutingModule,
     FormsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
-      // Register the ServiceWorker as soon as the app is stable
+      enabled: !isDevMode(),
+      // Register the ServiceWorker as soon as the application is stable
       // or after 30 seconds (whichever comes first).
       registrationStrategy: 'registerWhenStable:30000'
-    })
+    }),
+    // ServiceWorkerModule.register('ngsw-worker.js', {
+    //   enabled: environment.production,
+    //   // Register the ServiceWorker as soon as the app is stable
+    //   // or after 30 seconds (whichever comes first).
+    //   registrationStrategy: 'registerWhenStable:30000'
+    // })
   ],
   providers: [
     { provide: PointParser, useClass: AutotravelPointParser, multi: true },

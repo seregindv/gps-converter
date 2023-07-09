@@ -9,17 +9,24 @@ import { PointParser } from '../model/parsers/point-parser';
   styles: ['.large { font-size: 20px }']
 })
 export class GpsConverterComponent {
-  constructor(public converters: ConverterBase, private _parsers: PointParser) { }
+  constructor(converters: ConverterBase, private _parsers: PointParser) { 
+    this.converters = converters as any as ConverterBase[];
+  }
 
-  @ViewChild('downloadLink') downloadLink: ElementRef;
+  @ViewChild('downloadLink') downloadLink: ElementRef | undefined;
 
   fileName = '';
+
+  converters: ConverterBase[];
 
   save(text: string, converter: ConverterBase): void {
     const lines = text.split('\n');
     const name = this.fileName && this.fileName[0] ? this.fileName : 'points';
     const xml = converter.getXml(name, lines);
     const file = new Blob([xml], { type: 'application/octet-stream' });
+    if (!this.downloadLink) {
+      return;
+    }
     this.downloadLink.nativeElement.href = URL.createObjectURL(file);
     this.downloadLink.nativeElement.download = `${name}.${converter.getExtension()}`;
     this.downloadLink.nativeElement.click();

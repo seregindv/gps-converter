@@ -3,7 +3,7 @@ import { PointParser } from './point-parser';
 
 
 export class AutotravelPointParser extends PointParser {
-    createPoint(line: string): NamedEarthPoint {
+    createPoint(line: string): NamedEarthPoint | null {
         const result = /[NS]\s*(\d+)\D+([\d\.]+)\D?[\s,]+[EW]\s*(\d+)\D+([\d\.]+)\D?[\s]+(.+)/.exec(line);
         if (!result) {
             return null;

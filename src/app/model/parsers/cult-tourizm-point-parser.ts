@@ -2,7 +2,7 @@ import { NamedEarthPoint } from './named-earth-point';
 import { PointParser } from './point-parser';
 
 export class CultTourizmPointParser extends PointParser {
-    createPoint(line: string): NamedEarthPoint {
+    createPoint(line: string): NamedEarthPoint | null {
         const result = /[NS]([\d\.]+)\s+[EW]([\d\.]+)\s+(.+)/.exec(line);
         if (!result) {
             return null;

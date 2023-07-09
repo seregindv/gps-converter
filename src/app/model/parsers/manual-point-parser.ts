@@ -3,7 +3,7 @@ import { PointParser } from './point-parser';
 
 
 export class ManualPointParser extends PointParser {
-    createPoint(line: string): NamedEarthPoint {
+    createPoint(line: string): NamedEarthPoint | null {
         const result = /(\-?\d+(?:,|\.)\d+)\s+(\-?\d+(?:,|\.)\d+)\s+(.+)/.exec(line);
         if (!result) {
             return null;

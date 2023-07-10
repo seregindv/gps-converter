@@ -1,22 +1,28 @@
 import { FileHelper } from './file-helper';
 import { Folder } from './folder';
 import { FolderType } from './folder-type.enum';
+import { ZipReader, BlobReader, TextWriter } from '@zip.js/zip.js';
 
 export class KmlParser {
-    parse(file: Blob): Promise<Folder[]> {
+    async parse(file: Blob): Promise<Folder[]> {
         const fileName = file.name.toLowerCase();
         if (fileName.endsWith('.kml')) {
-            return this.getFolders(file);
+            const content = await FileHelper.readAsText(file);
+            return this.getFolders(content);
         } else if (fileName.endsWith('.kmz')) {
-            // TODO: unzip and process file
+            const zipReader = new ZipReader(new BlobReader(file));
+            const entries = await zipReader.getEntries();
+            const entry = entries.find(e => e.filename === 'doc.kml');
+            if (entry?.getData) {
+                const content = await entry.getData(new TextWriter());
+                return this.getFolders(content)
+            }
         }
         return Promise.resolve([]);
     }
 
-    private async getFolders(file: Blob): Promise<Folder[]> {
-        const xml = await FileHelper.parseXml(file);
-        console.log(xml);
-
+    private async getFolders(content: string): Promise<Folder[]> {
+        const xml = await FileHelper.parseString(content);
         const document = xml.kml.Document[0];
         const folders: Folder[] = [];
         const defaultName = document.name[0];

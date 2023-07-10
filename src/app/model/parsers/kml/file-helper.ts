@@ -19,8 +19,12 @@ export class FileHelper {
         });
     }
 
-    static async parseXml(file: Blob) {
+    static async parseBlob(file: Blob) {
         const content = await this.readAsText(file);
+        return parseStringPromise(content);
+    }
+
+    static parseString(content: string) {
         return parseStringPromise(content);
     }
 }

@@ -1,5 +1,14 @@
 <div style="display: flex; flex-direction: column; height: 100%">
-    <div style="flex-grow: 1; padding: 5px 5px 0 5px">
+    <div style="padding: 12px; display: flex" class="large">
+        <button class="large" style="height: fit-content" (click)="fileInput.click()">KML/KMZ</button>
+        <input type="file" style="display: none" accept=".kml,.kmz" #fileInput (change)="processInputFile($event)">
+        <div  class="file-links">
+            <a *ngFor="let link of fileLinks" [href]="link.address" [download]="link.fileName" class="file-link">
+                {{link.name}}
+            </a>
+        </div>
+    </div>
+    <div style="flex-grow: 1; padding: 0 5px">
         <textarea placeholder="POI text" #text style="width: 100%; height: 100%;"></textarea>
     </div>
     <div style="padding: 12px 10px 0 10px; display: flex">

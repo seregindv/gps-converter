@@ -1,6 +1,24 @@
-body, html {
+body,
+html {
     height: calc(100% - 3px);
     width: calc(100% - 3px);
     margin: 0;
     padding: 0;
+}
+
+.file-links{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-left: 10px;
+    white-space: nowrap;
+    gap: 2px 0;
+}
+
+.file-link:not(:last-child):after {
+    content: '|';
+    display: inline-block;
+    width: 15px;
+    text-align: center;
+    color: gray;
 }

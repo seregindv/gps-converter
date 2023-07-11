@@ -12,6 +12,6 @@ export class ManualPointParser extends PointParser {
             result[3]);
     }
     get formatSample(): string {
-        return '55.87719 38.78353 ул. Советская';
+        return '55.87719 38.78353 Soviet str.';
     }
 }

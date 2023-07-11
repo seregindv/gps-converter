@@ -6,19 +6,17 @@ html {
     padding: 0;
 }
 
-.file-links{
+.file-links {
     display: flex;
-    flex-wrap: wrap;
-    align-items: center;
     margin-left: 10px;
-    white-space: nowrap;
     gap: 2px 0;
+    flex-direction: column;
+    align-self: center;
+    overflow: hidden;
 }
 
-.file-link:not(:last-child):after {
-    content: '|';
-    display: inline-block;
-    width: 15px;
-    text-align: center;
-    color: gray;
+.file-link {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

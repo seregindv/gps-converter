@@ -10,6 +10,6 @@ export class CultTourizmPointParser extends PointParser {
         return new NamedEarthPoint(parseFloat(result[2]), parseFloat(result[1]), result[3].trimEnd());
     }
     get formatSample(): string {
-        return 'N55.87719 E38.78353 ул. Советская';
+        return 'N55.87719 E38.78353 Soviet str.';
     }
 }

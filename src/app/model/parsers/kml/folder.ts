@@ -1,5 +1,5 @@
 import { FolderType } from "./folder-type.enum";
-import { Point } from "./point";
+import { Point } from "../point";
 
 export class Folder {
     constructor() {

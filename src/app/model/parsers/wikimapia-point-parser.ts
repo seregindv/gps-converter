@@ -1,14 +1,14 @@
-import { NamedEarthPoint } from './named-earth-point';
+import { Point } from './point';
 import { PointParser } from './point-parser';
 
 
 export class WikimapiaPointParser extends PointParser {
-    createPoint(line: string): NamedEarthPoint | null {
+    createPoint(line: string): Point | null {
         const result = /[^\d]*(?<lat_deg>\d+).(?<lat_min>\d+).(?<lat_sec>\d+).(?<lat_dir>[NS])\s+(?<lon_deg>\d+).(?<lon_min>\d+).(?<lon_sec>\d+).(?<lon_dir>[WE])\s+(?<name>.+)/.exec(line);
         if (!result || !result.groups) {
             return null;
         }
-        return NamedEarthPoint.fromDegMinSec(result.groups['lon_deg'], result.groups['lon_min'], result.groups['lon_sec'],
+        return Point.fromDegMinSec(result.groups['lon_deg'], result.groups['lon_min'], result.groups['lon_sec'],
             result.groups['lat_deg'], result.groups['lat_min'], result.groups['lat_sec'],
             result.groups['name']);
     }

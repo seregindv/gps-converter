@@ -1,7 +1,6 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ConverterBase } from '../model/converter-base';
 import { PointParser } from '../model/parsers/point-parser';
-import { KmlParser } from '../model/parsers/kml/kml-parser';
 import { GpxWriter } from '../model/parsers/kml/gpx-writer';
 import { FileLink } from '../model/file-link';
 
@@ -26,7 +25,7 @@ export class GpsConverterComponent {
     const lines = text.split('\n');
     const name = this.fileName && this.fileName[0] ? this.fileName : 'points';
     const xml = converter.getXml(name, lines);
-    const file = new Blob([xml], { type: 'application/octet-stream' });
+    const file = new Blob(xml, { type: 'application/octet-stream' });
     if (!this.downloadLink) {
       return;
     }
@@ -41,7 +40,8 @@ export class GpsConverterComponent {
   }
 
   async processInputFile(e: any) {
-    const parser = new KmlParser();
+    const kml = await import('../model/parsers/kml/kml-parser');
+    const parser = new kml.KmlParser();
     const folders = await parser.parse(e.target.files[0]);
     const writer = new GpxWriter();
     this.fileLinks = writer.getFiles(folders);

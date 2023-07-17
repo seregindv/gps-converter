@@ -1,14 +1,14 @@
-import { NamedEarthPoint } from './named-earth-point';
+import { Point } from './point';
 import { PointParser } from './point-parser';
 
 
 export class ManualPointParser extends PointParser {
-    createPoint(line: string): NamedEarthPoint | null {
+    createPoint(line: string): Point | null {
         const result = /(\-?\d+(?:,|\.)\d+)\s+(\-?\d+(?:,|\.)\d+)\s+(.+)/.exec(line);
         if (!result) {
             return null;
         }
-        return new NamedEarthPoint(parseFloat(result[2].replace(',', '.')), parseFloat(result[1].replace(',', '.')),
+        return new Point(parseFloat(result[2].replace(',', '.')), parseFloat(result[1].replace(',', '.')),
             result[3]);
     }
     get formatSample(): string {

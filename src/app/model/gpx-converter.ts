@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ConverterBase } from './converter-base';
 import { PointParser } from './parsers/point-parser';
+import { GpxWriter } from './parsers/kml/gpx-writer';
 
 @Injectable()
 export class GpxConverter extends ConverterBase {
@@ -12,12 +13,11 @@ export class GpxConverter extends ConverterBase {
 
     getContent(name: string, lines: string[]): string[] {
         const result: string[] = ['<gpx>'];
+        const gpxWriter = new GpxWriter();
         for (const line of lines) {
             const point = this.parse(line);
             if (point) {
-                result.push(`<wpt lat="${point.latitude}" lon="${point.longtitude}">`,
-                    `<name>${point.name}</name>`,
-                    '</wpt>');
+                gpxWriter.pushPoint(result, point);
             }
         }
         result.push('</gpx>');

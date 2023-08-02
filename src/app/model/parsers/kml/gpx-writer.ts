@@ -15,7 +15,7 @@ export class GpxWriter {
     pushPoint(result: string[], point: Point) {
         result.push(`<wpt lat="${point.latitude}" lon="${point.longtitude}">`,
             `<name>${point.name}</name>`);
-        this.addColor(point, result);
+        this.pushColor(point, result);
         if (point.description) {
             result.push(`<desc>${point.description}</desc>`);
         }
@@ -29,7 +29,7 @@ export class GpxWriter {
     private getPath(folder: Folder) {
         const result = this.getHeader();
         result.push('<trk>');
-        this.addColor(folder, result);
+        this.pushColor(folder, result);
         result.push('<trkseg>');
         for (const point of folder.points) {
             result.push(`<trkpt lon="${point.longtitude}" lat="${point.latitude}" />`)
@@ -47,7 +47,7 @@ export class GpxWriter {
         return result;
     }
 
-    private addColor(colored: Point | Folder, result: string[]) {
+    private pushColor(colored: Point | Folder, result: string[]) {
         if (colored.color) {
             result.push(`<extensions><color>#${colored.color}</color></extensions>`);
         }

@@ -2,6 +2,7 @@ import { FileLink } from "../../file-link";
 import { Folder } from "./folder";
 import { FolderType } from "./folder-type.enum";
 import { Point } from "../point";
+import { XmlHelper } from "./xml-helper";
 
 export class GpxWriter {
     getFiles(folders: Folder[]): FileLink[] {
@@ -14,10 +15,10 @@ export class GpxWriter {
 
     pushPoint(result: string[], point: Point) {
         result.push(`<wpt lat="${point.latitude}" lon="${point.longtitude}">`,
-            `<name>${point.name}</name>`);
+            `<name>${XmlHelper.getSafeString(point.name)}</name>`);
         this.pushColor(point, result);
         if (point.description) {
-            result.push(`<desc>${point.description}</desc>`);
+            result.push(`<desc>${XmlHelper.getSafeString(point.description)}</desc>`);
         }
         result.push('</wpt>');
     }

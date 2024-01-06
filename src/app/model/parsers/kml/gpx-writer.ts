@@ -16,11 +16,15 @@ export class GpxWriter {
     pushPoint(result: string[], point: Point) {
         result.push(`<wpt lat="${point.latitude}" lon="${point.longtitude}">`,
             `<name>${XmlHelper.getSafeString(point.name)}</name>`);
-        this.pushColor(point, result);
+        this.pushExtensions(point, result);
         if (point.description) {
             result.push(`<desc>${XmlHelper.getSafeString(point.description)}</desc>`);
         }
         result.push('</wpt>');
+    }
+
+    getGpxHeader() {
+        return '<gpx xmlns:osmand="https://osmand.net">';
     }
 
     private getFile(folder: Folder): string[] {
@@ -30,7 +34,7 @@ export class GpxWriter {
     private getPath(folder: Folder) {
         const result = this.getHeader();
         result.push('<trk>');
-        this.pushColor(folder, result);
+        this.pushExtensions(folder, result);
         result.push('<trkseg>');
         for (const point of folder.points) {
             result.push(`<trkpt lon="${point.longtitude}" lat="${point.latitude}" />`)
@@ -48,13 +52,21 @@ export class GpxWriter {
         return result;
     }
 
-    private pushColor(colored: Point | Folder, result: string[]) {
-        if (colored.color) {
-            result.push(`<extensions><color>#${colored.color}</color></extensions>`);
+    private pushExtensions(extensible: Point | Folder, result: string[]) {
+        const point = extensible as Point;
+        if (extensible.color || point.icon) {
+            result.push('<extensions>')
+            if (extensible.color) {
+                result.push(`<color>#${point.color}</color>`);
+            }
+            if (point.icon) {
+                result.push(`<osmand:icon>${point.icon}</osmand:icon>`);
+            }
+            result.push('</extensions>');
         }
     }
 
     private getHeader() {
-        return ['<?xml version="1.0" encoding="utf-8"?>', '<gpx>'];
+        return ['<?xml version="1.0" encoding="utf-8"?>', this.getGpxHeader()];
     }
 }

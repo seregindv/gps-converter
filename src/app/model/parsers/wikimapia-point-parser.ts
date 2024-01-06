@@ -12,6 +12,7 @@ export class WikimapiaPointParser extends PointParser {
             result.groups['lat_deg'], result.groups['lat_min'], result.groups['lat_sec'],
             result.groups['name']);
     }
+    
     get formatSample(): string {
         return '55°52\'48"N   38°46\'38"E MTB Skill Park';
     }

@@ -12,8 +12,8 @@ export class GpxConverter extends ConverterBase {
     }
 
     getContent(name: string, lines: string[]): string[] {
-        const result: string[] = ['<gpx>'];
         const gpxWriter = new GpxWriter();
+        const result = [gpxWriter.getGpxHeader()];
         for (const line of lines) {
             const point = this.parse(line);
             if (point) {

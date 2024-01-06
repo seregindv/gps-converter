@@ -4,6 +4,7 @@ export class Point {
 
     description?: string | undefined;
     color?: string | undefined;
+    icon?: string | undefined;
 
     static fromDegMinSec(lonDeg: string, lonMin: string, lonSec: string,
         latDeg: string, latMin: string, latSec: string, name: string): Point {

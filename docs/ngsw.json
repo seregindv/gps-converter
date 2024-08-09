@@ -1,7 +1,7 @@
 {
   "configVersion": 1,
-  "timestamp": 1723232323637,
-  "index": "/gpx-converter/index.html",
+  "timestamp": 1723238924370,
+  "index": "/gps-converter/index.html",
   "assetGroups": [
     {
       "name": "app",
@@ -11,14 +11,14 @@
         "ignoreVary": true
       },
       "urls": [
-        "/gpx-converter/581.24d25a2084f7f0d0.js",
-        "/gpx-converter/favicon.ico",
-        "/gpx-converter/index.html",
-        "/gpx-converter/main.957f67e3a9992466.js",
-        "/gpx-converter/manifest.webmanifest",
-        "/gpx-converter/polyfills.f627c4d348cb61ef.js",
-        "/gpx-converter/runtime.4ca72ec6e5abc5fa.js",
-        "/gpx-converter/styles.21dc236b3085ae5b.css"
+        "/gps-converter/581.24d25a2084f7f0d0.js",
+        "/gps-converter/favicon.ico",
+        "/gps-converter/index.html",
+        "/gps-converter/main.957f67e3a9992466.js",
+        "/gps-converter/manifest.webmanifest",
+        "/gps-converter/polyfills.f627c4d348cb61ef.js",
+        "/gps-converter/runtime.4ca72ec6e5abc5fa.js",
+        "/gps-converter/styles.21dc236b3085ae5b.css"
       ],
       "patterns": []
     },
@@ -30,36 +30,36 @@
         "ignoreVary": true
       },
       "urls": [
-        "/gpx-converter/assets/icons/icon-128x128.png",
-        "/gpx-converter/assets/icons/icon-144x144.png",
-        "/gpx-converter/assets/icons/icon-152x152.png",
-        "/gpx-converter/assets/icons/icon-192x192.png",
-        "/gpx-converter/assets/icons/icon-384x384.png",
-        "/gpx-converter/assets/icons/icon-512x512.png",
-        "/gpx-converter/assets/icons/icon-72x72.png",
-        "/gpx-converter/assets/icons/icon-96x96.png"
+        "/gps-converter/assets/icons/icon-128x128.png",
+        "/gps-converter/assets/icons/icon-144x144.png",
+        "/gps-converter/assets/icons/icon-152x152.png",
+        "/gps-converter/assets/icons/icon-192x192.png",
+        "/gps-converter/assets/icons/icon-384x384.png",
+        "/gps-converter/assets/icons/icon-512x512.png",
+        "/gps-converter/assets/icons/icon-72x72.png",
+        "/gps-converter/assets/icons/icon-96x96.png"
       ],
       "patterns": []
     }
   ],
   "dataGroups": [],
   "hashTable": {
-    "/gpx-converter/581.24d25a2084f7f0d0.js": "c65f5e5d5b386905c5fd314f8e2c3da8b0f7f54c",
-    "/gpx-converter/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
-    "/gpx-converter/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
-    "/gpx-converter/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
-    "/gpx-converter/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
-    "/gpx-converter/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
-    "/gpx-converter/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
-    "/gpx-converter/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
-    "/gpx-converter/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
-    "/gpx-converter/favicon.ico": "be24d7f0e6e511ee8ae2d12488c80e67affe8e9f",
-    "/gpx-converter/index.html": "19300d13f353c11fe5994c3698213e7fc152e465",
-    "/gpx-converter/main.957f67e3a9992466.js": "cca1a86acc1ca8bf6cd411b3b0263408dd60e991",
-    "/gpx-converter/manifest.webmanifest": "d55a2db6bbf0f1742d218e3e8ad1dabd86aed9ef",
-    "/gpx-converter/polyfills.f627c4d348cb61ef.js": "1d297f28587d6a94e6304fe9b6c10b0c8d156222",
-    "/gpx-converter/runtime.4ca72ec6e5abc5fa.js": "5f40f2f639652c577becb51b9b1e634b95aa612b",
-    "/gpx-converter/styles.21dc236b3085ae5b.css": "8be0f13b725ec28c7d3263af947e7bc15de37481"
+    "/gps-converter/581.24d25a2084f7f0d0.js": "c65f5e5d5b386905c5fd314f8e2c3da8b0f7f54c",
+    "/gps-converter/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
+    "/gps-converter/assets/icons/icon-144x144.png": "b0bd89982e08f9bd2b642928f5391915b74799a7",
+    "/gps-converter/assets/icons/icon-152x152.png": "7479a9477815dfd9668d60f8b3b2fba709b91310",
+    "/gps-converter/assets/icons/icon-192x192.png": "1abd80d431a237a853ce38147d8c63752f10933b",
+    "/gps-converter/assets/icons/icon-384x384.png": "329749cd6393768d3131ed6304c136b1ca05f2fd",
+    "/gps-converter/assets/icons/icon-512x512.png": "559d9c4318b45a1f2b10596bbb4c960fe521dbcc",
+    "/gps-converter/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
+    "/gps-converter/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
+    "/gps-converter/favicon.ico": "be24d7f0e6e511ee8ae2d12488c80e67affe8e9f",
+    "/gps-converter/index.html": "37c99f8c33c5159062c73af7ac5ed9cdeb8917df",
+    "/gps-converter/main.957f67e3a9992466.js": "cca1a86acc1ca8bf6cd411b3b0263408dd60e991",
+    "/gps-converter/manifest.webmanifest": "d55a2db6bbf0f1742d218e3e8ad1dabd86aed9ef",
+    "/gps-converter/polyfills.f627c4d348cb61ef.js": "1d297f28587d6a94e6304fe9b6c10b0c8d156222",
+    "/gps-converter/runtime.4ca72ec6e5abc5fa.js": "5f40f2f639652c577becb51b9b1e634b95aa612b",
+    "/gps-converter/styles.21dc236b3085ae5b.css": "8be0f13b725ec28c7d3263af947e7bc15de37481"
   },
   "navigationUrls": [
     {

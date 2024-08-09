@@ -1,0 +1,1 @@
+body,html{height:calc(100% - 3px);width:calc(100% - 3px);margin:0;padding:0}.file-links{display:flex;margin-left:10px;gap:2px 0;flex-direction:column;align-self:center;overflow:hidden}.file-link{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}

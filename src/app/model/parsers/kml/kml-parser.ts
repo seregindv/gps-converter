@@ -55,6 +55,7 @@ export class KmlParser {
             return false;
 
         const color = this.getColor(element);
+        const icon = this.getIcon(element) === 1769 ? 'special_symbol_check_mark' : 'special_star';
         const coordinatesValue: string = placemarkPoint.coordinates && placemarkPoint.coordinates[0];
         const coordinates = coordinatesValue.trim().split(',');
         folder.points.push(
@@ -63,7 +64,8 @@ export class KmlParser {
                 latitude: coordinates[1].trim(),
                 longtitude: coordinates[0].trim(),
                 description,
-                color
+                color,
+                icon
             });
         return true;
     }
@@ -86,6 +88,18 @@ export class KmlParser {
             lineFolder.points.push({ latitude: coordinates[1], longtitude: coordinates[0] })
         }
         return true;
+    }
+
+    private getIcon(kmlPlacemark: any): number | undefined {
+        // google
+        const styleUrl = kmlPlacemark.styleUrl && kmlPlacemark.styleUrl[0];
+        if (styleUrl) {
+            const iconId = /(?:\-)(\d{4,})(?:\-|$)/.exec(styleUrl);
+            if (iconId) {
+                return +iconId[1];
+            }
+        }
+        return undefined;
     }
 
     private getColor(kmlPlacemark: any): string | undefined {

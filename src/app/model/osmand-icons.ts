@@ -1,0 +1,17 @@
+export const MemorialObelisk = 'memorial_obelisk';
+export const Park = 'park';
+export const TheatreGenreComedy = 'theatre_genre_comedy';
+export const AmenityCinema = 'amenity_cinema';
+export const TourismMuseum = 'tourism_museum';
+export const Waterfall = 'waterfall';
+export const AmenityFountain = 'amenity_fountain';
+export const TourismArtwork = 'tourism_artwork';
+export const AmenityMarketplace = 'amenity_marketplace';
+export const ShopSupermarket = 'shop_supermarket';
+export const Beach = 'beach';
+export const ReligionChristian = 'religion_christian';
+export const ReligionJewish = 'religion_jewish';
+export const ReligionMuslim = 'religion_muslim';
+export const AmenityMonastery = 'amenity_monastery';
+export const Default = 'special_star';
+export const Checkmark = 'special_symbol_check_mark';

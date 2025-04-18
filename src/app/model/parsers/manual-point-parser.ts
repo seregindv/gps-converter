@@ -1,6 +1,6 @@
 import { Point } from './point';
 import { PointParser } from './point-parser';
-
+import * as Icons from '../osmand-icons';
 
 export class ManualPointParser extends PointParser {
   private static _gray = 'bdbdbd';
@@ -47,60 +47,62 @@ export class ManualPointParser extends PointParser {
     switch (point.description) {
       case 'Жанровая скульптура':
       case 'Памятник, мемориал':
-        point.icon = 'memorial_obelisk';
+        point.icon = Icons.MemorialObelisk;
         break;
       case 'Парк культуры':
-        point.icon = 'park';
+        point.icon = Icons.Park;
         break;
       case 'Театр':
-        point.icon = 'theatre_genre_comedy';
+        point.icon = Icons.TheatreGenreComedy;
         break;
       case 'Кинотеатр':
-        point.icon = 'amenity_cinema';
+        point.icon = Icons.AmenityCinema;
         break;
       case 'Культурный центр':
       case 'Выставочный центр':
-        point.icon = 'tourism_museum';
+        point.icon = Icons.TourismMuseum;
         break;
       case 'Водопад':
-        point.icon = 'waterfall';
+        point.icon = Icons.Waterfall;
         break;
       case 'Фонтан':
-        point.icon = 'amenity_fountain';
+        point.icon = Icons.AmenityFountain;
         break;
       case 'Граффити':
-        point.icon = 'tourism_artwork';
+        point.icon = Icons.TourismArtwork;
         break;
       case 'Рынок':
-        point.icon = 'amenity_marketplace';
+        point.icon = Icons.AmenityMarketplace;
         break;
       case 'Супермаркет':
-        point.icon = 'shop_supermarket';
+        point.icon = Icons.ShopSupermarket;
         this.setColorIfEmpty(point, '000000');
         break;
       case 'Пляж':
-        point.icon = 'beach';
+        point.icon = Icons.Beach;
         break;
       case 'Достопримечательность':
         const name = point.name?.toLowerCase() || '';
         if (['церковь', 'собор', 'храм', 'часовня'].some(r => name.includes(r))) {
-          point.icon = 'religion_christian';
+          point.icon = Icons.ReligionChristian;
           this.setColorIfEmpty(point, ManualPointParser._gray);
         } else if (name.includes('синагога')) {
-          point.icon = 'religion_jewish';
+          point.icon = Icons.ReligionJewish;
           this.setColorIfEmpty(point, ManualPointParser._gray);
         } else if (name.includes('мечеть')) {
-          point.icon = 'religion_muslim';
+          point.icon = Icons.ReligionMuslim;
           this.setColorIfEmpty(point, ManualPointParser._gray);
         } else if (name.includes('монастырь')) {
-          point.icon = 'amenity_monastery';
+          point.icon = Icons.AmenityMonastery;
           this.setColorIfEmpty(point, ManualPointParser._gray);
         } else if (name.includes('музей')) {
-          point.icon = 'tourism_museum';
+          point.icon = Icons.TourismMuseum;
         } else if (name.includes('парк')) {
-          point.icon = 'park';
+          point.icon = Icons.Park;
         }
         break;
+      default:
+        point.icon = Icons.Default;
     }
   }
 

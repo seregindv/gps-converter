@@ -2,6 +2,7 @@ import { FileHelper } from './file-helper';
 import { Folder } from './folder';
 import { FolderType } from './folder-type.enum';
 import { ZipReader, BlobReader, TextWriter } from '@zip.js/zip.js';
+import * as Icons from '../../osmand-icons';
 
 export class KmlParser {
     async parse(file: Blob): Promise<Folder[]> {
@@ -55,7 +56,7 @@ export class KmlParser {
             return false;
 
         const color = this.getColor(element);
-        const icon = this.getIcon(element) === 1769 ? 'special_symbol_check_mark' : 'special_star';
+        const icon = this.getIcon(element) === 1769 ? Icons.Checkmark : Icons.Default;
         const coordinatesValue: string = placemarkPoint.coordinates && placemarkPoint.coordinates[0];
         const coordinates = coordinatesValue.trim().split(',');
         folder.points.push(

@@ -3,6 +3,7 @@ import { Folder } from './folder';
 import { FolderType } from './folder-type.enum';
 import { ZipReader, BlobReader, TextWriter } from '@zip.js/zip.js';
 import * as Icons from '../../osmand-icons';
+import { Point } from '../point';
 
 export class KmlParser {
     async parse(file: Blob): Promise<Folder[]> {
@@ -59,7 +60,8 @@ export class KmlParser {
         const icon = this.getIcon(element) === 1769 ? Icons.Checkmark : Icons.Default;
         const coordinatesValue: string = placemarkPoint.coordinates && placemarkPoint.coordinates[0];
         const coordinates = coordinatesValue.trim().split(',');
-        folder.points.push(
+        folder.points[0] ??= [];
+        folder.points[0].push(
             {
                 name,
                 latitude: coordinates[1].trim(),
@@ -71,10 +73,15 @@ export class KmlParser {
         return true;
     }
 
-    private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: any, placemarkName: string, placemarkDescription: string): boolean {
-        var coordinatesString = this.getPropertyAtPath<string>(kmlPlacemark, e => e.LineString, e => e[0], e => e.coordinates, e => e[0]) ||
-            this.getPropertyAtPath<string>(kmlPlacemark, e => e.LinearRing, e => e[0], e => e.coordinates, e => e[0]);
-        if (!coordinatesString) {
+    private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: any, placemarkName: string, placemarkDescription: string)
+        : boolean {
+        var segments = this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.LineString, e => e[0], e => e.coordinates) ||
+            this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.Polygon, e => e[0], e => e.LinearRing, e => e[0],
+                 e => e.coordinates) ||
+            this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.MultiGeometry, e => e[0], e => e.Polygon, e => e.map(
+                (item: any) => this.getPropertyAtPath<string>(item, i => i.outerBoundaryIs, i => i[0], i => i.LinearRing,
+                    i => i[0], i => i.coordinates, i => i[0])));
+        if (!segments || !segments[0]) {
             return false;
         }
         const pathColor = this.getColor(kmlPlacemark);
@@ -83,10 +90,14 @@ export class KmlParser {
         lineFolder.type = FolderType.Path;
         lineFolder.color = pathColor;
         folders.push(lineFolder);
-        const lines = coordinatesString.trim().split(/[\n\r]/);
-        for (const line of lines) {
-            const coordinates = line.trim().split(',');
-            lineFolder.points.push({ latitude: coordinates[1], longtitude: coordinates[0] })
+        for (const segment of segments) {
+            const points: Point[] = [];
+            const lines = segment.trim().split(/[\n\r]/);
+            for (const line of lines) {
+                const coordinates = line.trim().split(',');
+                points.push({ latitude: coordinates[1], longtitude: coordinates[0] })
+            }
+            lineFolder.points.push(points);
         }
         return true;
     }

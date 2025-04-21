@@ -9,6 +9,6 @@ export class Folder {
 
     type: FolderType;
     name: string | undefined;
-    points: Point[];
+    points: Point[][];
     color: string | undefined;
 }

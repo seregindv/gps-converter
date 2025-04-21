@@ -35,17 +35,20 @@ export class GpxWriter {
         const result = this.getHeader();
         result.push('<trk>');
         this.pushExtensions(folder, result);
-        result.push('<trkseg>');
-        for (const point of folder.points) {
-            result.push(`<trkpt lon="${point.longtitude}" lat="${point.latitude}" />`)
+        for (const pointGroup of folder.points) {
+            result.push('<trkseg>');
+            for (const point of pointGroup) {
+                result.push(`<trkpt lon="${point.longtitude}" lat="${point.latitude}" />`)
+            }
+            result.push('</trkseg>');
         }
-        result.push('</trkseg>', '</trk>', '</gpx>');
+        result.push('</trk>', '</gpx>');
         return result;
     }
 
-    private getPoints(points: Point[]) {
+    private getPoints(points: Point[][]) {
         const result: string[] = this.getHeader();
-        for (const point of points) {
+        for (const point of points.flatMap(p => p)) {
             this.pushPoint(result, point);
         }
         result.push('</gpx>');

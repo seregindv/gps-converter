@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1745234065886,
+  "timestamp": 1770459419324,
   "index": "/gps-converter/index.html",
   "assetGroups": [
     {
@@ -14,7 +14,7 @@
         "/gps-converter/581.e91e2ea5d7c6ceca.js",
         "/gps-converter/favicon.ico",
         "/gps-converter/index.html",
-        "/gps-converter/main.b625ccdf01012034.js",
+        "/gps-converter/main.c5982d75c0674b74.js",
         "/gps-converter/manifest.webmanifest",
         "/gps-converter/polyfills.f627c4d348cb61ef.js",
         "/gps-converter/runtime.d78b68aa360d286d.js",
@@ -54,8 +54,8 @@
     "/gps-converter/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/gps-converter/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/gps-converter/favicon.ico": "be24d7f0e6e511ee8ae2d12488c80e67affe8e9f",
-    "/gps-converter/index.html": "6443dd0af6a014734c40dda2404b884c0bcd00a3",
-    "/gps-converter/main.b625ccdf01012034.js": "b2c08977dd3bf2beaba49eba617db162adbcbb8f",
+    "/gps-converter/index.html": "89b0da5cb31c8a85e35d6740fe53318d86a81298",
+    "/gps-converter/main.c5982d75c0674b74.js": "64396706df8ffa854ef53351f1a4dff01314f4f7",
     "/gps-converter/manifest.webmanifest": "d55a2db6bbf0f1742d218e3e8ad1dabd86aed9ef",
     "/gps-converter/polyfills.f627c4d348cb61ef.js": "1d297f28587d6a94e6304fe9b6c10b0c8d156222",
     "/gps-converter/runtime.d78b68aa360d286d.js": "c738464d810b379b1ef9f6daa2513c832ed99a64",

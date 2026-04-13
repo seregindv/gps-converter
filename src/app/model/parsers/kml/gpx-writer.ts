@@ -7,7 +7,7 @@ import { XmlHelper } from "./xml-helper";
 export class GpxWriter {
     getFiles(folders: Folder[]): FileLink[] {
         return folders.map(folder => ({
-            address: URL.createObjectURL(new Blob(this.getFile(folder), { type: 'application/octet-stream' })),
+            address: URL.createObjectURL(new Blob(this.getFile(folder), { type: 'application/gpx+xml' })),
             name: folder.name!,
             fileName: folder.name + '.gpx'
         }));

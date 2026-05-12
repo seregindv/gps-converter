@@ -1,25 +1,29 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ConverterBase } from '../model/converter-base';
 import { PointParser } from '../model/parsers/point-parser';
 import { GpxWriter } from '../model/parsers/kml/gpx-writer';
 import { FileLink } from '../model/file-link';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-gps-converter',
-  templateUrl: './gps-converter.component.html',
+  templateUrl: './gps-converter.html',
   encapsulation: ViewEncapsulation.None,
-  styles: ['.large { font-size: 20px }']
+  styles: ['.large { font-size: 20px }'],
+  imports: [
+    CommonModule,
+    FormsModule
+  ]
 })
 export class GpsConverterComponent {
-  constructor(converters: ConverterBase, private _parsers: PointParser) {
-    this.converters = converters as any as ConverterBase[];
-  }
-
   @ViewChild('downloadLink') downloadLink!: ElementRef;
   @ViewChild('fileInput') fileInput!: HTMLInputElement;
   fileName = '';
-  converters: ConverterBase[];
   fileLinks!: FileLink[];
+  converters = inject(ConverterBase) as any as ConverterBase[];
+
+  private _parsers = inject(PointParser) as any as PointParser[];
 
   save(text: string, converter: ConverterBase): void {
     const lines = text.split('\n');
@@ -36,7 +40,7 @@ export class GpsConverterComponent {
 
   showInfo(): void {
     console.log(this.converters);
-    alert(['Supported formats: '].concat((this._parsers as unknown as PointParser[]).map(p => '- ' + p.formatSample)).join('\n'));
+    alert(['Supported formats: '].concat(this._parsers.map(p => '- ' + p.formatSample)).join('\n'));
   }
 
   async processInputFile(e: any) {

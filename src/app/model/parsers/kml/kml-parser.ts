@@ -1,12 +1,12 @@
 import { FileHelper } from './file-helper';
 import { Folder } from './folder';
 import { FolderType } from './folder-type.enum';
-import { ZipReader, BlobReader, TextWriter } from '@zip.js/zip.js';
+import { ZipReader, BlobReader, TextWriter, FileEntry } from '@zip.js/zip.js';
 import * as Icons from '../../osmand-icons';
 import { Point } from '../point';
 
 export class KmlParser {
-    async parse(file: Blob): Promise<Folder[]> {
+    async parse(file: File): Promise<Folder[]> {
         const fileName = file.name.toLowerCase();
         if (fileName.endsWith('.kml')) {
             const content = await FileHelper.readAsText(file);
@@ -14,7 +14,7 @@ export class KmlParser {
         } else if (fileName.endsWith('.kmz')) {
             const zipReader = new ZipReader(new BlobReader(file));
             const entries = await zipReader.getEntries();
-            const entry = entries.find(e => e.filename === 'doc.kml');
+            const entry = entries.find(e => e.filename === 'doc.kml') as FileEntry;
             if (entry?.getData) {
                 const content = await entry.getData(new TextWriter());
                 return this.getFolders(content)

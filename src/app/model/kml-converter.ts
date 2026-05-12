@@ -3,7 +3,7 @@ import { ConverterBase } from './converter-base';
 import { PointParser } from './parsers/point-parser';
 import { XmlHelper } from './parsers/kml/xml-helper';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class KmlConverter extends ConverterBase {
     constructor(parsers: PointParser) { super(parsers); }
 

@@ -16,13 +16,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "externalDependencies": [
-              "events",
-              "timers"
-            ],
-            "allowedCommonJsDependencies": [
-              "xml2js"
-            ],
             "outputPath": {
               "base": "docs",
               "browser": ""

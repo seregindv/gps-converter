@@ -3,7 +3,7 @@
         <button class="large" style="height: fit-content" (click)="fileInput.click()">KML/KMZ</button>
         <input type="file" style="display: none" accept=".kml,.kmz" #fileInput (change)="processInputFile($event)">
         <div class="file-links">
-            @for (link of fileLinks; track $index) {
+            @for (link of fileLinks(); track $index) {
             <a [href]="link.address" [download]="link.fileName" class="file-link">
                 {{link.name}}
             </a>

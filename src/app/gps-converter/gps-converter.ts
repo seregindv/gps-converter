@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 import { ConverterBase } from '../model/converter-base';
 import { PointParser } from '../model/parsers/point-parser';
 import { GpxWriter } from '../model/parsers/kml/gpx-writer';
@@ -20,7 +20,7 @@ export class GpsConverterComponent {
   @ViewChild('downloadLink') downloadLink!: ElementRef;
   @ViewChild('fileInput') fileInput!: HTMLInputElement;
   fileName = '';
-  fileLinks!: FileLink[];
+  fileLinks = signal<FileLink[] | null>(null);
   converters = inject(ConverterBase) as any as ConverterBase[];
 
   private _parsers = inject(PointParser) as any as PointParser[];
@@ -48,7 +48,7 @@ export class GpsConverterComponent {
     const parser = new kml.KmlParser();
     const folders = await parser.parse(e.target.files[0]);
     const writer = new GpxWriter();
-    this.fileLinks = writer.getFiles(folders);
+    this.fileLinks.set(writer.getFiles(folders));
     this.fileInput.value = '';
   }
 }

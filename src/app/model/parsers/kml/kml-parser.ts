@@ -94,15 +94,17 @@ export class KmlParser {
 
     private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: Element, placemarkName: string | undefined, placemarkDescription: string | undefined)
         : boolean {
-        let segments = kmlPlacemark.querySelectorAll('LineString > coordinates') ||
-            kmlPlacemark.querySelectorAll('Polygon > LinearRing > coordinates');
-        if (!segments) {
+        let segments = kmlPlacemark.querySelectorAll('LineString > coordinates');
+        if (!segments.length) {
+            segments = kmlPlacemark.querySelectorAll('Polygon > LinearRing > coordinates');
+        }
+        if (!segments.length) {
             const polygon = kmlPlacemark.querySelector('MultiGeometry > Polygon');
             if (polygon) {
                 segments = polygon.querySelectorAll('outerBoundaryIs > LinearRing > coordinates');
             }
         }
-        if (!segments) {
+        if (!segments.length) {
             return false;
         }
         const pathColor = this.getColor(kmlPlacemark);

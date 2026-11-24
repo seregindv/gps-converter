@@ -15,7 +15,6 @@ export class ManualPointParser extends PointParser {
     'violet': '673ab7'
   };
 
-
   createPoint(line: string): Point | null {
     const tokens = line.split('|||');
 

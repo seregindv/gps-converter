@@ -2,10 +2,12 @@
     <div style="padding: 12px; display: flex" class="large">
         <button class="large" style="height: fit-content" (click)="fileInput.click()">KML/KMZ</button>
         <input type="file" style="display: none" accept=".kml,.kmz" #fileInput (change)="processInputFile($event)">
-        <div  class="file-links">
-            <a *ngFor="let link of fileLinks" [href]="link.address" [download]="link.fileName" class="file-link">
+        <div class="file-links">
+            @for (link of fileLinks(); track $index) {
+            <a [href]="link.address" [download]="link.fileName" class="file-link">
                 {{link.name}}
             </a>
+            }
         </div>
     </div>
     <div style="flex-grow: 1; padding: 0 5px">
@@ -18,11 +20,13 @@
         <div style="margin-left: 14px" (click)="showInfo()">
             <button class="large">?</button>
         </div>
-        <div *ngFor="let converter of converters" style="margin-left: 6px">
+        @for (converter of converters; track $index) {
+        <div style="margin-left: 6px">
             <button (click)="save(text.value, converter)" class="large">
                 {{converter.getExtension() | uppercase}}
             </button>
         </div>
+        }
         <a style="display: none" #downloadLink download="points.gpx">Download</a>
     </div>
 </div>

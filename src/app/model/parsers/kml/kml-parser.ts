@@ -1,12 +1,12 @@
 import { FileHelper } from './file-helper';
 import { Folder } from './folder';
 import { FolderType } from './folder-type.enum';
-import { ZipReader, BlobReader, TextWriter } from '@zip.js/zip.js';
+import { ZipReader, BlobReader, TextWriter, FileEntry } from '@zip.js/zip.js';
 import * as Icons from '../../osmand-icons';
 import { Point } from '../point';
 
 export class KmlParser {
-    async parse(file: Blob): Promise<Folder[]> {
+    async parse(file: File): Promise<Folder[]> {
         const fileName = file.name.toLowerCase();
         if (fileName.endsWith('.kml')) {
             const content = await FileHelper.readAsText(file);
@@ -14,7 +14,7 @@ export class KmlParser {
         } else if (fileName.endsWith('.kmz')) {
             const zipReader = new ZipReader(new BlobReader(file));
             const entries = await zipReader.getEntries();
-            const entry = entries.find(e => e.filename === 'doc.kml');
+            const entry = entries.find(e => e.filename === 'doc.kml') as FileEntry;
             if (entry?.getData) {
                 const content = await entry.getData(new TextWriter());
                 return this.getFolders(content)
@@ -23,13 +23,17 @@ export class KmlParser {
         return Promise.resolve([]);
     }
 
-    private async getFolders(content: string): Promise<Folder[]> {
-        const xml = await FileHelper.parseString(content);
-        const document = xml.kml.Document[0];
+    private getFolders(content: string): Folder[] {
+        const xml = FileHelper.parseString(content);
+        const document = xml.querySelector('kml > Document');
+        if (!document) {
+            return [];
+        }
         const folders: Folder[] = [];
-        const defaultName = document.name[0];
-        if (document.Folder) {
-            for (const folder of document.Folder) {
+        const defaultName = this.getName(document);
+        const documentFolders = document.querySelectorAll('Folder');
+        if (documentFolders.length) {
+            for (const folder of documentFolders) {
                 this.processFolder(folder, folders, defaultName);
             }
         } else {
@@ -38,27 +42,42 @@ export class KmlParser {
         return folders;
     }
 
-    private processFolder(kmlFolder: any, folders: Folder[], defaultName: string) {
-        const folderName: string = (kmlFolder.name && kmlFolder.name[0]) ?? defaultName;
+    private processFolder(kmlFolder: Element, folders: Folder[], defaultName: string | undefined): void {
+        const folderName = this.getName(kmlFolder) ?? defaultName;
         const folder = new Folder();
         folder.name = folderName;
         folders.push(folder);
-        for (const kmlPlacemark of kmlFolder.Placemark) {
-            const placemarkName = kmlPlacemark.name[0];
-            const placemarkDescription = kmlPlacemark.description && kmlPlacemark.description[0];
+        for (const kmlPlacemark of kmlFolder.querySelectorAll('Placemark')) {
+            const placemarkName = this.getName(kmlPlacemark);
+            const placemarkDescription = this.getDescription(kmlPlacemark);
             if (!this.tryAddPoint(kmlPlacemark, folder, placemarkName, placemarkDescription))
                 this.tryAddPath(folder, folders, kmlPlacemark, placemarkName, placemarkDescription);
         }
     }
 
-    private tryAddPoint(element: any, folder: Folder, name: string, description: string): boolean {
-        const placemarkPoint = element.Point && element.Point[0];
+    private getName(element: Element): string | undefined {
+        return this.getText(element, 'name');
+    }
+
+    private getDescription(element: Element): string | undefined {
+        return this.getText(element, 'description');
+    }
+
+    private getText(element: Element, name: string): string | undefined {
+        return element  .querySelector(name)?.textContent;
+    }
+
+    private tryAddPoint(element: Element, folder: Folder, name: string | undefined, description: string | undefined): boolean {
+        const placemarkPoint = element.querySelector('Point');
         if (!placemarkPoint)
             return false;
 
         const color = this.getColor(element);
         const icon = this.getIcon(element) === 1769 ? Icons.Checkmark : Icons.Default;
-        const coordinatesValue: string = placemarkPoint.coordinates && placemarkPoint.coordinates[0];
+        const coordinatesValue = element.querySelector('coordinates')?.textContent;
+        if (!coordinatesValue) {
+            return false;
+        }
         const coordinates = coordinatesValue.trim().split(',');
         folder.points[0] ??= [];
         folder.points[0].push(
@@ -73,38 +92,45 @@ export class KmlParser {
         return true;
     }
 
-    private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: any, placemarkName: string, placemarkDescription: string)
+    private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: Element, placemarkName: string | undefined, placemarkDescription: string | undefined)
         : boolean {
-        var segments = this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.LineString, e => e[0], e => e.coordinates) ||
-            this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.Polygon, e => e[0], e => e.LinearRing, e => e[0],
-                 e => e.coordinates) ||
-            this.getPropertyAtPath<string[]>(kmlPlacemark, e => e.MultiGeometry, e => e[0], e => e.Polygon, e => e.map(
-                (item: any) => this.getPropertyAtPath<string>(item, i => i.outerBoundaryIs, i => i[0], i => i.LinearRing,
-                    i => i[0], i => i.coordinates, i => i[0])));
-        if (!segments || !segments[0]) {
+        const segments = kmlPlacemark.querySelectorAll(':is(LineString, LinearRing) > coordinates');
+        if (segments.length === 0) {
             return false;
         }
+
+        const pointGroups: Point[][] = [];
+        for (const segmentElement of segments) {
+            const coordinatesText = segmentElement.textContent?.trim();
+            if (!coordinatesText) {
+                continue;
+            }
+
+            const points = coordinatesText.split(/\s+/).flatMap(coordinate => {
+                const [longitude, latitude] = coordinate.split(',');
+                return longitude && latitude ? [{ latitude, longtitude: longitude }] : [];
+            });
+            if (points.length > 0) {
+                pointGroups.push(points);
+            }
+        }
+        if (pointGroups.length === 0) {
+            return false;
+        }
+
         const pathColor = this.getColor(kmlPlacemark);
         const lineFolder = new Folder();
         lineFolder.name = `${folder.name} - ${placemarkName || placemarkDescription}`;
         lineFolder.type = FolderType.Path;
         lineFolder.color = pathColor;
         folders.push(lineFolder);
-        for (const segment of segments) {
-            const points: Point[] = [];
-            const lines = segment.trim().split(/[\n\r]/);
-            for (const line of lines) {
-                const coordinates = line.trim().split(',');
-                points.push({ latitude: coordinates[1], longtitude: coordinates[0] })
-            }
-            lineFolder.points.push(points);
-        }
+        lineFolder.points.push(...pointGroups);
         return true;
     }
 
-    private getIcon(kmlPlacemark: any): number | undefined {
+    private getIcon(kmlPlacemark: Element): number | undefined {
         // google
-        const styleUrl = kmlPlacemark.styleUrl && kmlPlacemark.styleUrl[0];
+        const styleUrl = kmlPlacemark.querySelector('styleUrl')?.textContent;
         if (styleUrl) {
             const iconId = /(?:\-)(\d{4,})(?:\-|$)/.exec(styleUrl);
             if (iconId) {
@@ -114,9 +140,9 @@ export class KmlParser {
         return undefined;
     }
 
-    private getColor(kmlPlacemark: any): string | undefined {
+    private getColor(kmlPlacemark: Element): string | undefined {
         // google
-        const styleUrl = kmlPlacemark.styleUrl && kmlPlacemark.styleUrl[0];
+        const styleUrl = kmlPlacemark.querySelector('styleUrl')?.textContent;
         if (styleUrl) {
             const color = /(?:\-)([ABCDEF\d]{6})(?:\-|$)/.exec(styleUrl);
             if (color) {
@@ -124,7 +150,7 @@ export class KmlParser {
             }
         }
         // yandex
-        let rgb = this.getPropertyAtPath<string>(kmlPlacemark, e => e.Style, e => e[0], e => e.IconStyle, e => e[0], e => e.color, e => e[0]);
+        let rgb  = kmlPlacemark.querySelector('Style > IconStyle > color')?.textContent;
         if (rgb) {
             if (rgb.length > 6)
                 rgb = rgb.substring(rgb.length - 6, 6);
@@ -133,16 +159,5 @@ export class KmlParser {
             return rgb;
         }
         return undefined;
-    }
-
-    private getPropertyAtPath<T>(xml: any, ...getElement: ((e: any) => any)[]): T {
-        let result = xml;
-        for (const getter of getElement) {
-            result = getter(result);
-            if (!result) {
-                return result;
-            }
-        }
-        return result;
     }
 }

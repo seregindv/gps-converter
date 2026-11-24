@@ -94,35 +94,37 @@ export class KmlParser {
 
     private tryAddPath(folder: Folder, folders: Folder[], kmlPlacemark: Element, placemarkName: string | undefined, placemarkDescription: string | undefined)
         : boolean {
-        let segments = kmlPlacemark.querySelectorAll('LineString > coordinates');
-        if (!segments.length) {
-            segments = kmlPlacemark.querySelectorAll('Polygon > LinearRing > coordinates');
-        }
-        if (!segments.length) {
-            const polygon = kmlPlacemark.querySelector('MultiGeometry > Polygon');
-            if (polygon) {
-                segments = polygon.querySelectorAll('outerBoundaryIs > LinearRing > coordinates');
-            }
-        }
-        if (!segments.length) {
+        const segments = kmlPlacemark.querySelectorAll(':is(LineString, LinearRing) > coordinates');
+        if (segments.length === 0) {
             return false;
         }
+
+        const pointGroups: Point[][] = [];
+        for (const segmentElement of segments) {
+            const coordinatesText = segmentElement.textContent?.trim();
+            if (!coordinatesText) {
+                continue;
+            }
+
+            const points = coordinatesText.split(/\s+/).flatMap(coordinate => {
+                const [longitude, latitude] = coordinate.split(',');
+                return longitude && latitude ? [{ latitude, longtitude: longitude }] : [];
+            });
+            if (points.length > 0) {
+                pointGroups.push(points);
+            }
+        }
+        if (pointGroups.length === 0) {
+            return false;
+        }
+
         const pathColor = this.getColor(kmlPlacemark);
         const lineFolder = new Folder();
         lineFolder.name = `${folder.name} - ${placemarkName || placemarkDescription}`;
         lineFolder.type = FolderType.Path;
         lineFolder.color = pathColor;
         folders.push(lineFolder);
-        for (const segmentElement of segments) {
-            const segment = segmentElement.textContent;
-            const points: Point[] = [];
-            const lines = segment.trim().split(/[\n\r]/);
-            for (const line of lines) {
-                const coordinates = line.trim().split(',');
-                points.push({ latitude: coordinates[1], longtitude: coordinates[0] })
-            }
-            lineFolder.points.push(points);
-        }
+        lineFolder.points.push(...pointGroups);
         return true;
     }
 

@@ -43,7 +43,7 @@ jobs:
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: dist/gps-converter/browser
+          path: docs
 
       - name: Deploy to GitHub Pages
         id: deployment
